@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Fill in the Blanks</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #3366cc;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .message {
+            font-size: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 id="sentence"></h1>
+        <div class="form">
+            <input type="text" id="inputField" placeholder="Enter the missing word">
+            <button id="submitButton">Submit</button>
+        </div>
+        <p class="message" id="message"></p>
+    </div>
+    <script>
+        // Sample JSON data containing sentences
+        const sentences = [
+            { sentence: "The quick brown __ jumps over the lazy dog.", missingWord: "fox" },
+            { sentence: "A watched pot never __.", missingWord: "boils" },
+            { sentence: "Actions speak louder than __.", missingWord: "words" },
+        ];
+
+        let currentSentenceIndex = 0;
+
+        // Function to render the current sentence
+        function renderSentence() {
+            const sentenceContainer = document.getElementById("sentence");
+            sentenceContainer.textContent = sentences[currentSentenceIndex].sentence;
+        }
+
+        // Function to check the user's answer and update the display
+        function checkAnswer() {
+            const userInput = document.getElementById("inputField").value.toLowerCase();
+            const missingWord = sentences[currentSentenceIndex].missingWord.toLowerCase();
+            const messageContainer = document.getElementById("message");
+
+            if (userInput === missingWord) {
+                messageContainer.textContent = "CORRECT!";
+                messageContainer.style.color = "green";
+                currentSentenceIndex++;
+
+                if (currentSentenceIndex === sentences.length) {
+                    // All sentences have been completed
+                    messageContainer.textContent = "Well done!";
+                    messageContainer.style.color = "blue";
+                    document.getElementById("inputField").disabled = true;
+                    document.getElementById("submitButton").disabled = true;
+                } else {
+                    // Move on to the next sentence
+                    setTimeout(() => {
+                        renderSentence();
+                        messageContainer.textContent = "";
+                        document.getElementById("inputField").value = "";
+                    }, 1000);
+                }
+            } else {
+                messageContainer.textContent = "TRY AGAIN!";
+                messageContainer.style.color = "red";
+
+                setTimeout(() => {
+                    messageContainer.textContent = "";
+                }, 1000);
+            }
+        }
+
+        // Event listener for the submit button
+        document.getElementById("submitButton").addEventListener("click", checkAnswer);
+
+        // Event listener for pressing the Enter key
+        document.getElementById("inputField").addEventListener("keydown", function (event) {
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+        });
+
+        // Initial setup
+        renderSentence();
+    </script>
+</body>
+
+</html>
